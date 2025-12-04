@@ -28,7 +28,7 @@
         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         time used to count word frequencies with a list is : xxx seconds
 **************************************************************************/
-
+#include "def.cpp"
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -37,10 +37,15 @@
 #include <map>
 #include <time.h>
 #include <string>
-#include <algorithim>
+#include <algorithm>
 #include <cctype>
 
 using namespace std; 
+
+/*Declaring functions*/
+string CleanWord(const string& word);
+string cleanFile(ifstream& file);
+
 
 int main()
 {
@@ -60,72 +65,55 @@ int main()
     //additional variables
     string word; 
 
-    //cleaning bible and world192
+    //cleaning bible and world192 
+    inFile1.open("bible.txt");
+    if(!inFile1){cerr << "Couldnt open bible.txt\n"; return 1;}
 
+    inFile2.open("world192.txt");
+    if(!inFile2){cerr << "Couldnt open world192.txt\n"; return 1;}
+
+
+    string cleanedFile1 = cleanFile(inFile1);
+    outFile.open("bible_cleaned.txt");
+    if(!outFile)
+    {
+        cerr << "Couldnt open outfile1 for writing\n"; return 1;
+    }
+    outFile << cleanedFile1;
+    outFile.close();
+
+
+    string cleanedFile2 = cleanFile(inFile2);
+    outFile.open("world192_cleaned.txt");
+    if(!outFile)
+    {
+        cerr << "Couldnt open outfile2 for writing\n"; return 1;
+    }
+    outFile << cleanedFile2;
+    outFile.close();
 
     /***********************************
     count word frequencies with a list
     ************************************/
     //start the time
     start_time = time(NULL);
+
+
     //count bible.txt
     inFile1.open("bible.txt");
     inFile2.open("world192.txt");
     outFile.open("list_counting.txt"); 
 
-    while (!inFile1.eof()) {
-        inFile1 >> word; 
-        
-        string cleared = "";
 
-        for (char c : word)
-        {
-            if(isalpha(static_cast<unsigned char>(c)))
-            {
-                cleared += tolower(static_cast<unsigned char>(c));
-            }
-        }
-        
-        if (!cleared.empty())
-        {
-            mylist.push_back(cleared);
-        }
-        
+    while (!inFile1.eof()) {
+        inFile >> word; 
+        //this part will insert the word into myList
     }
+    
     inFile1.close();
     //this part will count the frequencie of words in myList
     //output the counting results
-    list<string> temp;
-    
-    for (const string current : mylist) 
-    {
-        bool counted = false;
-        for (const string &x : temp)
-        {
-            if (x == temp)
-            {
-                counted = true;
-                break;
-            }
-        }
-
-        if (counted) continue;
-
-        int count;
-        for (const string &x : mylist)
-        {
-            if(x == current)
-            {
-                count++;
-            }
-        }
-    }
-
-    outfile << current << " : " << count << endl;
-    counted.push_back(current);
-
-
-
+    // ......
     mylist.clear(); 
     while (!inFile2.eof()) {
         inFile >> word;
@@ -144,10 +132,10 @@ int main()
     inFile2.close();
     outFile.close();
 
-    /*********************************************
+    /***************
      Repeat the counting jobs with a vector, 
      a set/multiset, and a map respectively
-    **********************************************/
+    ****************/
 
 
 
