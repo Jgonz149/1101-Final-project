@@ -82,7 +82,6 @@ int main()
     outFile << cleanedFile1;
     outFile.close();
 
-
     string cleanedFile2 = cleanFile(inFile2);
     outFile.open("world192_cleaned.txt");
     if(!outFile)
@@ -110,67 +109,69 @@ int main()
     }
     inFile1.close();
 
-    list<pair<string, int>> listcount;
-    
-    for(const string& w: mylist)
+    list<pair<string, int> > listcount;
+
+    for (const string& w : mylist)
     {
         bool found = false;
-        for (const auto &p: listcount)
+        for (auto &p : listcount)       // not const; we modify p.second
         {
-            if(p.first == w)
+            if (p.first == w)
             {
                 ++p.second;
                 found = true;
                 break;
             }
-
         }
-        if(!found)
+        if (!found)
         {
-            listcount.push_back(make_pair(w,1));
+            listcount.push_back(make_pair(w, 1));
         }
     }
 
-    outFile << "Word Frequencies in bible.txt \n" ;
-    for(const auto &p : listcount)
+    outFile << "Word frequencies in bible.txt\n";
+    outFile << "word     frequency\n";
+    outFile << "++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    for (const auto &p : listcount)
     {
-        outFile << p.first <<  " : " << p.second << endl ; 
+        outFile << p.first << "     " << p.second << '\n';
     }
 
+    // ---------- world192.txt with list ----------
     listcount.clear();
-    mylist.clear(); 
+    mylist.clear();
 
-    while (!inFile2.eof()) {
-        inFile2 >> word;
+    while (inFile2 >> word) {
         mylist.push_back(word);
-        //this part will insert the word into myList
     }
     inFile2.close();
 
-    for(const string& w: mylist)
+    for (const string& w : mylist)
     {
         bool found = false;
-        for (const auto &p: listcount)
+        for (auto &p : listcount)
         {
-            if(p.first == w)
+            if (p.first == w)
             {
                 ++p.second;
                 found = true;
                 break;
             }
-
         }
-        if(!found)
+        if (!found)
         {
-            listcount.push_back(make_pair(w,1));
+            listcount.push_back(make_pair(w, 1));
         }
     }
     //output the counting results
+    outFile << "++++++++++++++++++++++++++++++++++++++++++++++" << endl;
     outFile << endl << "Word frequencies in World192.txt:" << endl;
+    outFile << "word     frequency\n";
     for(auto& p : listcount)
     {
         outFile << p.first << " : " << p.second << endl;
     }
+
     //record the end time
     end_time = time(NULL);
     outFile << "++++++++++++++++++++++++++++++++++++++++++++++" << endl;
