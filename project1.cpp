@@ -98,31 +98,79 @@ int main()
     //start the time
     start_time = time(NULL);
 
-
     //count bible.txt
-    inFile1.open("bible.txt");
-    inFile2.open("world192.txt");
+    inFile1.open("bible_cleaned.txt");
+    inFile2.open("world192_cleaned.txt");
     outFile.open("list_counting.txt"); 
 
 
     while (!inFile1.eof()) {
-        inFile >> word; 
-        //this part will insert the word into myList
+        inFile1 >> word; 
+        mylist.push_back(word);
     }
-    
     inFile1.close();
-    //this part will count the frequencie of words in myList
-    //output the counting results
-    // ......
+
+    list<pair<string, int>> listcount;
+    
+    for(const string& w: mylist)
+    {
+        bool found = false;
+        for (const auto &p: listcount)
+        {
+            if(p.first == w)
+            {
+                ++p.second;
+                found = true;
+                break;
+            }
+
+        }
+        if(!found)
+        {
+            listcount.push_back(make_pair(w,1));
+        }
+    }
+
+    outFile << "Word Frequencies in bible.txt \n" ;
+    for(const auto &p : listcount)
+    {
+        outFile << p.first <<  " : " << p.second << endl ; 
+    }
+
+    listcount.clear();
     mylist.clear(); 
+
     while (!inFile2.eof()) {
-        inFile >> word;
+        inFile2 >> word;
+        mylist.push_back(word);
         //this part will insert the word into myList
     }
     inFile2.close();
-    //this part will count the frequencie of words in myList
+
+    for(const string& w: mylist)
+    {
+        bool found = false;
+        for (const auto &p: listcount)
+        {
+            if(p.first == w)
+            {
+                ++p.second;
+                found = true;
+                break;
+            }
+
+        }
+        if(!found)
+        {
+            listcount.push_back(make_pair(w,1));
+        }
+    }
     //output the counting results
-    // ......
+    outFile << endl << "Word frequencies in World192.txt:" << endl;
+    for(auto& p : listcount)
+    {
+        outFile << p.first << " : " << p.second << endl;
+    }
     //record the end time
     end_time = time(NULL);
     outFile << "++++++++++++++++++++++++++++++++++++++++++++++" << endl;
